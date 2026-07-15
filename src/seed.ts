@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import { readFileSync } from 'node:fs'
+import { pathToFileURL } from 'node:url'
 import { PrismaClient } from '@prisma/client'
 import { lookupCoords } from './geo/reference.js'
 
@@ -43,7 +44,7 @@ async function main() {
 }
 
 // Csak közvetlen futtatáskor fut le a main (teszt importnál nem).
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('seed.ts')) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((err) => {
     console.error(err)
     process.exit(1)
