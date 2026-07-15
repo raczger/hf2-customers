@@ -8,18 +8,28 @@ export function createApp(prisma: PrismaClient): Express {
   const app = express()
 
   app.get('/customers/count', async (_req, res) => {
-    const count = await prisma.customers.count()
-    res.json({ count })
+    try {
+      const count = await prisma.customers.count()
+      res.json({ count })
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
   })
 
   app.get('/customers/by-distance', async (_req, res) => {
-    const rows = await prisma.customers.findMany()
-    const ranked = rows.map((c) => ({
-      ...c,
-      distanceKm: distanceToBudapestKm(c.lat, c.lon),
-    }))
-    ranked.sort(compareByDistance)
-    res.json(ranked)
+    try {
+      const rows = await prisma.customers.findMany()
+      const ranked = rows.map((c) => ({
+        ...c,
+        distanceKm: distanceToBudapestKm(c.lat, c.lon),
+      }))
+      ranked.sort(compareByDistance)
+      res.json(ranked)
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
   })
 
   return app
