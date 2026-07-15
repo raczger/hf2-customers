@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: hf2-customers-bmad-db
+    environment:
+      POSTGRES_USER: customers
+      POSTGRES_PASSWORD: customers
+      POSTGRES_DB: customers
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
